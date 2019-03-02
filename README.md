@@ -1,0 +1,1 @@
+NoSQL veri tabanı ile personel ve departman yönetim sistemi backend çalışması
