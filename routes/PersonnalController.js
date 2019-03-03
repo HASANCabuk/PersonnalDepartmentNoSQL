@@ -2,13 +2,6 @@ const router = require('express').Router();
 
 const personnalService=require("../services/PersonnalService");
 
-router.get('/', function (req, res) {
-    res.json({
-        status: 'API Its Working',
-        message: 'Welcome to RESTHub crafted with love!',
-    });
-});
-
 router.route('/')
     .get(personnalService.index)
     .post(personnalService.new);

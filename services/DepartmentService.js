@@ -1,14 +1,13 @@
-
-const mongoose=require('mongoose')
-Department = require("../model/Department");
+const Department = require("../model/Department");
 
 // Handle index actions
 exports.index = function (req, res) {
-    Department.get(function (err, Departments) {
+
+    Department.find( (err, Departments) =>{
         if (err) {
             res.json({
                 status: "error",
-                message: err,
+                message: err
             });
         }
         res.json({
@@ -21,32 +20,34 @@ exports.index = function (req, res) {
 
 // Handle create Department actions
 exports.new = function (req, res) {
-    var Department=new Department();
-    Department.Id=mongoose.Types.ObjectId();
-    Department.Name=req.body.Name
-    /*Department.name = req.body.name ? req.body.name : Department.name;
-    Department.gender = req.body.gender;
-    Department.email = req.body.email;
-    Department.phone = req.body.phone;
-*/
+    const department=new Department(req.body);
     // save the Department and check for errors
-    Department.save(function (err) {
-        // if (err)
-        //     res.json(err);
-
+    department.save()
+    .then(department=> {
         res.json({
             message: 'New Department created!',
-            data: Department
+            data: department
+        });
+    }).catch(err=>{
+        res.json({
+            status: "error",
+            message: err
         });
     });
+
+    
 };
 
 
 // Handle view Department info
 exports.view = function (req, res) {
-    Department.findById(req.params.Department_id, function (err, Department) {
-        if (err)
-            res.send(err);
+    Department.findById({_id:req.params.dep_id}, (err, Department) =>{
+        if (err){
+            res.json({
+                status: "error",
+                message: err
+           });
+        }
         res.json({
             message: 'Department details loading..',
             data: Department
@@ -57,32 +58,35 @@ exports.view = function (req, res) {
 // Handle update Department info
 exports.update = function (req, res) {
 
-    Department.findById(req.params.Department_id, function (err, Department) {
-        if (err)
-            res.send(err);
-
-        Department.name = req.body.name ? req.body.name : Department.name;
-        Department.gender = req.body.gender;
-        Department.email = req.body.email;
-        Department.phone = req.body.phone;
-
-        // save the Department and check for errors
-        Department.save(function (err) {
-            if (err)
-                res.json(err);
+    Department.findById({_id:req.params.dep_id}, (err, Department) =>{
+        if (err){
             res.json({
-                message: 'Department Info updated',
-                data: Department
-            });
-        });
+                status: "error",
+                message: err
+           });  
+        }else{
+            Department.name = req.body.name;
+            // save the Department and check for error
+            Department.save()
+                .then(department=> {
+                    res.json({
+                        message: 'Department Info updated',
+                        data: Department
+                    });
+                }).catch(err=>{
+                    res.json({
+                        status: "error",
+                        message: err
+                    });
+                });
+           }
     });
 };
-
 
 // Handle delete Department
 exports.delete = function (req, res) {
     Department.remove({
-        _id: req.params.Department_id
+        _id: req.params.dep_id
     }, function (err, Department) {
         if (err)
             res.send(err);
@@ -93,3 +97,4 @@ exports.delete = function (req, res) {
         });
     });
 };
+

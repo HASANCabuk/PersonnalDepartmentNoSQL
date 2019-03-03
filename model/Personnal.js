@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var timestamps = require('mongoose-timestamp');
 
-var personSchema = mongoose.Schema({
+var Personnal= mongoose.Schema({
     id: {
        type: mongoose.Types.ObjectId
     },
@@ -38,5 +38,5 @@ var personSchema = mongoose.Schema({
    
 });
 
-personSchema.plugin(timestamps);
-module.exports = mongoose.model('personnals', personSchema);
+Personnal.plugin(timestamps);
+module.exports = mongoose.model('Personnal', Personnal);

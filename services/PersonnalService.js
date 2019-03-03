@@ -1,9 +1,10 @@
 
-Personnal = require("../model/Personnal");
+const Personnal = require("../model/Personnal");
+const Department=require("../model/Department");
 
 // Handle index actions
 exports.index = function (req, res) {
-    Personnal.get(function (err, Personnals) {
+    Personnal.find((err, Personnals) =>{
         if (err) {
             res.json({
                 status: "error",
@@ -20,20 +21,26 @@ exports.index = function (req, res) {
 
 // Handle create Personnal actions
 exports.new = function (req, res) {
-    var Personnal = new Personnal();
-    Personnal.name = req.body.name ? req.body.name : Personnal.name;
-    Personnal.gender = req.body.gender;
-    Personnal.email = req.body.email;
-    Personnal.phone = req.body.phone;
-
-    // save the Personnal and check for errors
-    Personnal.save(function (err) {
-        // if (err)
-        //     res.json(err);
-
+    Department.findOne({name:req.body.department}, (err) =>{
+        if (err){
+            const personnal = new Personnal(req.body);
+        // save the Personnal and check for errors
+            personnal.save()
+            .then(personnal=>{
+                res.json({
+                    message: 'New Personnal created!',
+                    data: Personnal
+                });
+            }).catch(err=>{
+                res.json({
+                    status: "error",
+                    message: err
+                });
+            })   
+        }
         res.json({
-            message: 'New Personnal created!',
-            data: Personnal
+            status: "error",
+            message: err
         });
     });
 };
@@ -41,9 +48,13 @@ exports.new = function (req, res) {
 
 // Handle view Personnal info
 exports.view = function (req, res) {
-    Personnal.findById(req.params.Personnal_id, function (err, Personnal) {
-        if (err)
-            res.send(err);
+    Personnal.findById(req.params.per_id, (err, Personnal)=> {
+        if (err){
+            res.json({
+                status: "error",
+                message: err
+           });
+        }
         res.json({
             message: 'Personnal details loading..',
             data: Personnal

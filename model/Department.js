@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const depSchema = mongoose.Schema({
+const Department = mongoose.Schema({
     id: {
        type:mongoose.Types.ObjectId
     },
@@ -11,4 +11,4 @@ const depSchema = mongoose.Schema({
    
 });
 
-module.exports = mongoose.model('departments', depSchema);
+module.exports = mongoose.model('Department', Department);

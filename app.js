@@ -19,7 +19,12 @@ app.use(bodyParser.json());
 app.use("/department",depController);
 app.use("/personnal",perController);
 app.use("/user",usController);
-
+app.get('/',(req, res)=>{
+    res.json({
+        status: 'API Its Working',
+        message: 'Welcome to RESTHub crafted with love!',
+    });
+});
 
 app.listen(sett.webPort,()=>{
     console.log("Listening on port: "+sett.webPort);

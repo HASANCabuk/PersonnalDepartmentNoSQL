@@ -1,5 +1,5 @@
 
-User = require("../model/User");
+const User = require("../model/User");
 
 // Handle index actions
 exports.index = function (req, res) {
