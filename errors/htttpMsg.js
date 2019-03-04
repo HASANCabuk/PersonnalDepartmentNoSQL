@@ -1,4 +1,4 @@
-const sett=require("./settings");
+const sett=require("../helpers/settings");
 
 exports.show500=function(res,err){//Sunucuda bir hata oluştu ve istek karşılanamadı.
     if(sett.httpMsgFormat==="HTML"){
@@ -72,7 +72,7 @@ exports.showHome=function (res,control) {
     }
     res.end();
 }
-exports.validationError = function (res, errors, status_code) {//İstek hatalı (isteğin yapısı hatalı) olduğu belirtilir.
+exports.withValidationError = function (res, errors, status_code) {//İstek hatalı (isteğin yapısı hatalı) olduğu belirtilir.
     status_code = status_code || 400;
     return res.status(status_code).json({
         status_code: status_code,

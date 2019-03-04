@@ -1,10 +1,10 @@
 const router = require('express').Router();
 
 const personnalService=require("../services/PersonnalService");
-
+const validator=require("../validators/PersonnelValidator")
 router.route('/')
     .get(personnalService.index)
-    .post(personnalService.new);
+    .post([validator.personnal],personnalService.new);
 
 router.route('/:per_id')
     .get(personnalService.view)

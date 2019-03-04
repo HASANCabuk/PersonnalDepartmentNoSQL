@@ -21,27 +21,47 @@ exports.index = function (req, res) {
 
 // Handle create Personnal actions
 exports.new = function (req, res) {
-    Department.findOne({name:req.body.department}, (err) =>{
-        if (err){
-            const personnal = new Personnal(req.body);
-        // save the Personnal and check for errors
-            personnal.save()
-            .then(personnal=>{
-                res.json({
-                    message: 'New Personnal created!',
-                    data: Personnal
-                });
+
+    Personnal.findOne({firstName:req.body.firstName,lastName:req.body.lastName}).then(per=>{
+        if(per)
+        {
+            res.json({
+                message:req.body.firstName+" "+req.body.lastName+" daha önce eklenmiş" 
+                });     
+        }else{
+            Department.findOne({name:req.body.department}).then(dep=>{
+                if(!dep){
+                    res.json({
+                        message:req.body.department+" departmanı mevcut değil." 
+                        });     
+                }else{
+                    const personnal = new Personnal(req.body);
+                    // save the Personnal and check for errors
+                        personnal.save()
+                        .then(personnal=>{
+                            res.json({
+                                message: 'New Personnal created!',
+                                data: Personnal
+                            });
+                        }).catch(err=>{
+                            res.json({
+                                status: "error",
+                                message: err
+                            });
+                        });   
+                }
             }).catch(err=>{
                 res.json({
                     status: "error",
                     message: err
                 });
-            })   
+            });
         }
+    }).catch(err=>{
         res.json({
             status: "error",
-            message: err
-        });
+            message: err      
+    });
     });
 };
 

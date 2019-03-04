@@ -1,17 +1,10 @@
 let router = require('express').Router();
 
 const departmentService=require("../services/DepartmentService");
-/*
-router.get('/',(req, res)=>{
-    res.json({
-        status: 'API Its Working',
-        message: 'Welcome to RESTHub crafted with love!',
-    });
-});
-*/
+const validator=require("../validators/DepartmentValidator")
 router.route('/')
     .get(departmentService.index)
-    .post(departmentService.new);
+    .post([validator.department],departmentService.new);
 
 router.route('/:dep_id')
     .get(departmentService.view)

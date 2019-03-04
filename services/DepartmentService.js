@@ -1,5 +1,5 @@
 const Department = require("../model/Department");
-
+const DepartmentError=require("../errors/department")
 // Handle index actions
 exports.index = function (req, res) {
 
@@ -20,22 +20,33 @@ exports.index = function (req, res) {
 
 // Handle create Department actions
 exports.new = function (req, res) {
-    const department=new Department(req.body);
-    // save the Department and check for errors
-    department.save()
-    .then(department=> {
-        res.json({
-            message: 'New Department created!',
-            data: department
-        });
-    }).catch(err=>{
-        res.json({
-            status: "error",
-            message: err
-        });
-    });
-
-    
+  
+        Department.findOne({name:req.body.name}).then(dep=>{
+            if(dep){
+                res.json({
+                    message:req.body.name+" "+"daha önce eklenmiş" 
+                    });     
+            }else{
+                const department=new Department(req.body);
+                department.save().then(department=>{
+                    res.json({
+                        message: 'New Department created!',
+                        data: department
+                    });
+                })
+                .catch(err=>{
+                    res.json({
+                        status: "error",
+                        message: err
+                    });
+                });
+            }                  
+        }).catch(err=>{
+            res.json({
+                status: "error",
+                message: err
+            });
+        })  
 };
 
 
