@@ -85,24 +85,28 @@ exports.view = function (req, res) {
 // Handle update Personnal info
 exports.update = function (req, res) {
 
-    Personnal.findById(req.params.Personnal_id, function (err, Personnal) {
-        if (err)
-            res.send(err);
-
-        Personnal.name = req.body.name ? req.body.name : Personnal.name;
-        Personnal.gender = req.body.gender;
-        Personnal.email = req.body.email;
-        Personnal.phone = req.body.phone;
-
-        // save the Personnal and check for errors
-        Personnal.save(function (err) {
-            if (err)
-                res.json(err);
+    Personnal.findById({_id:req.params.per_id}, (err,Personnal) =>{
+        if (err){
             res.json({
-                message: 'Personnal Info updated',
-                data: Personnal
-            });
-        });
+                status: "error",
+                message: err
+           });  
+        }else{
+            Personnal.department = req.body.department;
+            // save the Department and check for error
+            Personnal.save()
+                .then(personnal=> {
+                    res.json({
+                        message: 'Personnal Info updated',
+                        data: Department
+                    });
+                }).catch(err=>{
+                    res.json({
+                        status: "error",
+                        message: err
+                    });
+                });
+           }
     });
 };
 
@@ -110,7 +114,7 @@ exports.update = function (req, res) {
 // Handle delete Personnal
 exports.delete = function (req, res) {
     Personnal.remove({
-        _id: req.params.Personnal_id
+        _id: req.params.per_id
     }, function (err, Personnal) {
         if (err)
             res.send(err);

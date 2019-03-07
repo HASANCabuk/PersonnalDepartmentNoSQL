@@ -1,5 +1,4 @@
 const Department = require("../model/Department");
-const DepartmentError=require("../errors/department")
 // Handle index actions
 exports.index = function (req, res) {
 

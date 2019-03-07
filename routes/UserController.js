@@ -1,17 +1,10 @@
 const router = require('express').Router();
-
+const validator=require("../validators/UserValidator")
 const userService=require("../services/UserService");
-
-router.get('/', function (req, res) {
-    res.json({
-        status: 'API Its Working',
-        message: 'Welcome to RESTHub crafted with love!',
-    });
-});
 
 router.route('/')
     .get(userService.index)
-    .post(userService.new);
+    .post([validator.user],userService.new);
 
 router.route('/:us_id')
     .get(userService.view)
